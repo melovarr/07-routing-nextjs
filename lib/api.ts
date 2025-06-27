@@ -1,11 +1,11 @@
-import axios from "axios";
-import type { NewNoteData, Note } from "../types/note";
+import axios from 'axios';
+import type { NewNoteData, Note } from '../types/note';
 
-axios.defaults.baseURL = "https://notehub-public.goit.study/api";
+axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
 
 const myKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 if (!myKey) {
-  throw new Error("TOKEN IS MISSING");
+  throw new Error('TOKEN IS MISSING');
 }
 
 export interface FetchNotesResponse {
@@ -17,10 +17,11 @@ interface FetchNotesParams {
   search?: string;
   page?: number;
   perPage?: number;
+  tag?: string;
 }
 
 const axiosInstance = axios.create({
-  baseURL: "https://notehub-public.goit.study/api",
+  baseURL: 'https://notehub-public.goit.study/api',
   headers: {
     Authorization: `Bearer ${myKey}`,
   },
@@ -28,22 +29,24 @@ const axiosInstance = axios.create({
 
 export async function fetchNotes(
   query: string,
-  page?: number
+  page?: number,
+  tag?: string
 ): Promise<FetchNotesResponse> {
   const params: FetchNotesParams = {
-    ...(query.trim() !== "" && { search: query.trim() }),
+    ...(query.trim() !== '' && { search: query.trim() }),
     page: page,
     perPage: 12,
+    ...(tag && tag !== 'All' && { tag }),
   };
 
-  const response = await axiosInstance.get<FetchNotesResponse>("/notes", {
+  const response = await axiosInstance.get<FetchNotesResponse>('/notes', {
     params,
   });
   return response.data;
 }
 
 export async function createNote(newNote: NewNoteData): Promise<Note> {
-  const response = await axiosInstance.post<Note>("/notes", newNote);
+  const response = await axiosInstance.post<Note>('/notes', newNote);
   return response.data;
 }
 
