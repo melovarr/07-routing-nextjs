@@ -11,6 +11,7 @@ type Props = {
 const NotePreviewPage = async ({ params }: Props) => {
   const { id } = await params;
   const note = await fetchNoteById(Number(id));
+  return note;
   //   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
