@@ -10,7 +10,7 @@ const Notes = async ({ params }: NotesProps) => {
   const { slug } = await params;
   const tag =
     slug.length > 0 && slug[0] !== 'All' ? (slug[0] as Tag) : undefined;
-  const initialNotesData = await fetchNotes('', 1);
+  const initialNotesData = await fetchNotes(tag ?? '', 1);
 
   return <NotesClient initialNotesData={initialNotesData} tag={tag} />;
 };
