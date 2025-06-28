@@ -36,7 +36,7 @@ export async function fetchNotes(
     ...(query.trim() !== '' && { search: query.trim() }),
     page: page,
     perPage: 12,
-    ...(tag && tag !== 'All' && { tag }),
+    tag,
   };
 
   const response = await axiosInstance.get<FetchNotesResponse>('/notes', {

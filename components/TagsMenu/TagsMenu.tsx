@@ -1,41 +1,38 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { Tag } from '@/types/note';
+import { useEffect, useRef, useState } from 'react';
 import css from './TagsMenu.module.css';
+import Link from 'next/link';
+import { tags } from '../../constants/tags';
 
-const tags: (Tag | 'All')[] = [
-  'All',
-  'Work',
-  'Personal',
-  'Meeting',
-  'Shopping',
-  'Todo',
-];
+const TagsMenu = () => {
+  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
+  const handleMenuToggle = () => setMenuIsOpen(!menuIsOpen);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-export default function TagsMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setMenuIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className={css.menuContainer}>
-      <button
-        className={css.menuButton}
-        onClick={() => setIsOpen(!isOpen)}
-        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-      >
+    <div ref={menuRef} className={css.menuContainer}>
+      <button onClick={handleMenuToggle} className={css.menuButton}>
         Notes ▾
       </button>
-      {isOpen && (
+      {menuIsOpen && (
         <ul className={css.menuList}>
           {tags.map(tag => (
             <li key={tag} className={css.menuItem}>
-              <Link
-                href={tag === 'All' ? '/notes' : `/notes/filter/${tag}`}
-                // href={`/notes/filter/${tag.toLowerCase()}`}
-                className={css.menuLink}
-                onClick={() => setIsOpen(false)}
-              >
+              <Link href={`/notes/filter/${tag}`} className={css.menuLink}>
                 {tag}
               </Link>
             </li>
@@ -44,4 +41,6 @@ export default function TagsMenu() {
       )}
     </div>
   );
-}
+};
+
+export default TagsMenu;
