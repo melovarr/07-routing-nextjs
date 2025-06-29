@@ -1,16 +1,18 @@
 'use client';
 
 import css from './NotePreview.module.css';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
 import Loader from '@/app/loading';
 import NoteError from '../../../notes/[id]/error';
 import Modal from '@/components/Modal/Modal';
 
-const NotePreviewClient = () => {
+type NotePreviewClientProps = { id: string };
+
+const NotePreviewClient = ({ id }: NotePreviewClientProps) => {
   const router = useRouter();
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const {
     data: note,
@@ -20,8 +22,13 @@ const NotePreviewClient = () => {
   } = useQuery({
     queryKey: ['note', id],
     queryFn: () => fetchNoteById(Number(id)),
-    refetchOnMount: false,
+    enabled: !!id,
+    // refetchOnMount: false,
   });
+
+  const handleCloseModal = () => {
+    router.back();
+  };
 
   if (isLoading) return <Loader />;
 
@@ -39,17 +46,20 @@ const NotePreviewClient = () => {
   });
 
   return (
-    <Modal>
+    <Modal onClose={handleCloseModal}>
       <div className={css.container}>
         <div className={css.item}>
           <div className={css.header}>
             <h2>{note.title}</h2>
+            {note.tag && <span className={css.tag}>{note.tag}</span>}
             <button className={css.editBtn}>Edit note</button>
           </div>
           <p className={css.content}>{note.content}</p>
           <p className={css.date}>{formatetDate}</p>
         </div>
-        <button onClick={router.back}>GoBack</button>
+        <button className={css.editBtn} onClick={handleCloseModal}>
+          GoBack
+        </button>
       </div>
     </Modal>
   );

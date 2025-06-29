@@ -1,4 +1,4 @@
-export type Tag = "Work" | "Personal" | "Meeting" | "Shopping" | "Todo";
+export type Tag = 'Work' | 'Personal' | 'Meeting' | 'Shopping' | 'Todo';
 
 export interface Note {
   id: number;
@@ -14,3 +14,5 @@ export interface NewNoteData {
   content: string;
   tag: Tag;
 }
+
+export type NotePreviewClientProps = {};
