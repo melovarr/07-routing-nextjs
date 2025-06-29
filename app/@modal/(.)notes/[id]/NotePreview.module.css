@@ -3,7 +3,7 @@
   margin: 32px auto;
   padding: 24px;
   background-color: #dbd1d1;
-  background-image: linear-gradient(to bottom, #28b4ab12, #24b96e43);
+  /* background-image: linear-gradient(to bottom, #28b4ab12, #24b96e43); */
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
