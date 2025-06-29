@@ -21,13 +21,9 @@ const NoteDetails = async ({ params }: Props) => {
   });
 
   return (
-    <div>
-      <h1>NoteDetails</h1>
-      <br />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <NotePreviewClient />
-      </HydrationBoundary>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotePreviewClient />
+    </HydrationBoundary>
   );
 };
 
