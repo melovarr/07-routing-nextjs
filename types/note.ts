@@ -14,5 +14,3 @@ export interface NewNoteData {
   content: string;
   tag: Tag;
 }
-
-export type NotePreviewClientProps = {};

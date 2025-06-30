@@ -8,11 +8,12 @@ import Loader from '@/app/loading';
 import NoteError from '../../../notes/[id]/error';
 import Modal from '@/components/Modal/Modal';
 
-type NotePreviewClientProps = { id: string };
+type NotePreviewClientProps = { id: string | number };
 
 const NotePreviewClient = ({ id }: NotePreviewClientProps) => {
   const router = useRouter();
-  // const { id } = useParams();
+  // Converting of ID to number, if nessesary
+  const numericId = typeof id === 'string' ? Number(id) : id;
 
   const {
     data: note,
@@ -20,10 +21,10 @@ const NotePreviewClient = ({ id }: NotePreviewClientProps) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['note', id],
-    queryFn: () => fetchNoteById(Number(id)),
+    queryKey: ['note', numericId],
+    queryFn: () => fetchNoteById(numericId),
     enabled: !!id,
-    // refetchOnMount: false,
+    refetchOnMount: false,
   });
 
   const handleCloseModal = () => {
@@ -65,70 +66,3 @@ const NotePreviewClient = ({ id }: NotePreviewClientProps) => {
   );
 };
 export default NotePreviewClient;
-
-// 'use client';
-
-// import { useParams, useRouter } from 'next/navigation';
-// import { useQuery } from '@tanstack/react-query';
-// import Modal from '@/components/Modal/Modal';
-// // import { Note } from '../../../../types/note';
-
-// type Note = {
-//   id: string;
-//   title: string;
-//   tag: string;
-//   content: string;
-//   createdAt: string;
-// };
-
-// const fetchNote = async (id: string): Promise<Note> => {
-//   const res = await fetch(`/api/notes/${id}`);
-//   if (!res.ok) throw new Error('Помилка завантаження нотатки');
-//   return res.json();
-// };
-
-// const NotePreviewClient = () => {
-//   const params = useParams();
-//   const id = params?.id as string;
-//   const router = useRouter();
-
-//   const { data, isLoading, isError, error } = useQuery({
-//     queryKey: ['note', id],
-//     queryFn: () => fetchNote(id),
-//     enabled: !!id,
-//   });
-
-//   const handleClose = () => router.back();
-
-//   return (
-//     <Modal onClose={handleClose}>
-//       <button onClick={handleClose}>Закрити</button>
-//       {isLoading && <div>Завантаження...</div>}
-//       {isError && <div>Сталася помилка: {error.message}</div>}
-//       {data && (
-//         <div>
-//           <h2>{data.title}</h2>
-//           <span>{data.tag}</span>
-//           <p>{data.content}</p>
-//           <small>{new Date(data.createdAt).toLocaleString()}</small>
-//         </div>
-//       )}
-//     </Modal>
-//   );
-// };
-
-// export default NotePreviewClient;
-
-// 'use client';
-
-// import NoteDetailsClient from '@/app/notes/[id]/NoteDetails.client';
-// import Modal from '@/components/Modal/Modal';
-
-// const NotePreviewClient = () => {
-//   return (
-//     <Modal>
-//       <NoteDetailsClient />
-//     </Modal>
-//   );
-// };
-// export default NotePreviewClient;

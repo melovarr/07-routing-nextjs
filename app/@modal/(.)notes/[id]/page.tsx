@@ -28,10 +28,3 @@ const NoteDetails = async ({ params }: Props) => {
 };
 
 export default NoteDetails;
-
-// import NotePreviewClient from './NotePreview.client';
-
-// const NotePreview = () => {
-//   return <NotePreviewClient />;
-// };
-// export default NotePreview;
